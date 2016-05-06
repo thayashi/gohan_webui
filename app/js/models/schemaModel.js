@@ -446,6 +446,7 @@ export default class SchemaModel extends Model {
       }
 
       const value = json.properties[key];
+      //console.log(value);
 
       schema[key] = {
         title: value.title,
@@ -474,7 +475,13 @@ export default class SchemaModel extends Model {
         schema[key].type = 'Number';
       } else if (value.type === 'array') {
         schema[key].type = 'List';
-        schema[key].itemType = 'Text';
+        if (value.items.type === 'object') {
+          schema[key].itemType = 'Object';
+          console.log(this.toFormJSON(value.items))
+          schema[key].subSchema = this.toFormJSON(value.items);
+        } else {
+          schema[key].itemType = 'Text';
+        }
       } else if (value.type === 'object') {
         schema[key].type = 'Object';
         schema[key].subSchema = this.toFormJSON(value);
@@ -487,6 +494,7 @@ export default class SchemaModel extends Model {
         schema[key].validators.push('required');
       }
     }
+    //console.log(schema)
     return schema;
   }
   /**
