@@ -293,14 +293,77 @@ body {
 
 }
 
+
+/*
+ * Backbone Form
+ */
+
+span.help-description {
+  display: inline-block;
+  margin-bottom: 5px;
+  color: #aaa;
+  margin-left: 0.3em;
+}
+
+.bbf-list {
+  > ul {
+    margin: 0;
+    padding: 0;
+    > li {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+    }
+  }
+}
+
+//.help-block {
+  // .error {
+  //   font-weight: bold;
+  //   margin-left: 0.5em;
+  // }
+//}
+
+
 /*
  * jsonform
  */
  
 .help-block.jsonform-description {
-  display: none;
+  //display: none;
 }
 
+
+.jsonform-node {
+  ul {
+    padding: 0;
+  }
+  li {
+    overflow: hidden;
+    span.line {float: left;}
+    div.form-group {
+      margin-left: 30px;
+      margin-right: 30px;
+    }
+  }
+  .glyphicon-list {
+    padding: 11px 0px;
+    padding-left: 8px;
+    cursor: move;
+    font-family: FontAwesome;
+    &:before {
+      content: "\F0C9";
+    }
+  }
+  .glyphicon-remove {
+    padding: 11px 0px;
+    padding-right: 8px;
+    font-family: FontAwesome;
+    &:before {
+      content: "\F00D";
+    }
+  }
+}
 
 @media (min-width: 768px) {
   .main {
@@ -352,37 +415,6 @@ body {
   input[type="checkbox"], input[type="radio"] {
     box-shadow: none;
     margin-top: 0;
-  }
-}
-
-.jsonform-node {
-  ul {
-    padding: 0;
-  }
-  li {
-    overflow: hidden;
-    span.line {float: left;}
-    div.form-group {
-      margin-left: 30px;
-      margin-right: 30px;
-    }
-  }
-  .glyphicon-list {
-    padding: 11px 0px;
-    padding-left: 8px;
-    cursor: move;
-    font-family: FontAwesome;
-    &:before {
-      content: "\F0C9";
-    }
-  }
-  .glyphicon-remove {
-    padding: 11px 0px;
-    padding-right: 8px;
-    font-family: FontAwesome;
-    &:before {
-      content: "\F00D";
-    }
   }
 }
 

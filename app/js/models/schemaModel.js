@@ -436,6 +436,7 @@ export default class SchemaModel extends Model {
     return collection;
   }
   toFormJSON(json) {
+   // console.log(json)
     const schema = {};
 
     for (let key in json.properties) {
@@ -455,6 +456,7 @@ export default class SchemaModel extends Model {
       };
 
       if (value.type === 'string') {
+        
         if (value.enum !== undefined) {
           schema[key].type = 'Select';
           schema[key].options = [];
@@ -470,6 +472,9 @@ export default class SchemaModel extends Model {
           schema[key].type = 'CodeEditor';
         } else {
           schema[key].type = 'Text';
+          if (value.description !== undefined) {
+            schema[key].help = value.description;
+          }
         }
       } else if (value.type === 'integer') {
         schema[key].type = 'Number';
@@ -477,8 +482,8 @@ export default class SchemaModel extends Model {
         schema[key].type = 'List';
         if (value.items.type === 'object') {
           schema[key].itemType = 'Object';
-          console.log(this.toFormJSON(value.items))
           schema[key].subSchema = this.toFormJSON(value.items);
+          //console.log(this.toFormJSON(value.items))
         } else {
           schema[key].itemType = 'Text';
         }
@@ -494,7 +499,6 @@ export default class SchemaModel extends Model {
         schema[key].validators.push('required');
       }
     }
-    //console.log(schema)
     return schema;
   }
   /**

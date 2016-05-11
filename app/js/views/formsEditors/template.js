@@ -5,9 +5,10 @@ import 'backbone-forms';
 import 'backbone-forms/distribution/adapters/backbone.bootstrap-modal';
 
 const Form = Backbone.Form;
+
 Form.template = _.template(
-  '<form class="form-horizontal" role="form" data-fieldsets>' +
-  '  <div id="alerts_form"></div>' +
+  '<form class="" role="form">' +
+  '  <div data-fieldsets></div>' +
   '</form>'
 );
 
@@ -20,55 +21,68 @@ Form.Fieldset.template = _.template(
 );
 
 Form.Field.template = _.template(
-  '<div class="form-group jsonform-node jsonform-error-resource---properties field-<%= key %>">' +
+  '<div class="form-group field-<%= key %>">' +
   '  <label class="control-label" for="<%= editorId %>"><%= title %></label>' +
+  '  <% if (help) { %>' +
+  '  <span class="help-description"> <%= help %></span>' +
+  '  <% } %>' +
   '  <div class="controls">' +
   '    <span data-editor></span>' +
-  '    <p class="help-block" data-error></p>' +
-  '    <p class="help-block"><%= help %></p>' +
+  '    <div class="help-block"><span class="error" data-error></span></div>' +
   '  </div>' +
   '</div>'
 );
 
-Form.NestedField.template = _.template(
-  '<div class="field-<%= key  %>">' +
-  '  <div title="<%= title %>" class="input-xlarge">' +
-  '    <%= title %>' +
-  '    <span data-editor></span>' +
-  '    <div class="help-inline" data-error></div>' +
-  '  </div>' +
-  '  <div class="help-block"><%= help %></div>' +
-  '</div>'
-);
+// Form.NestedField.template = _.template(
+//   '<div class="field-<%= key %>">' +
+//   '  <div title="<% if (titleHTML){ %><%= titleHTML %><% } else { %><%- title %><% } %>" class="input-xlarge">' +
+//   '    <span data-editor></span>' +
+//   '    <div class="help-inline" data-error></div>' +
+//   '  </div>' +
+//   '  <div class="help-block"><%= help %></div>' +
+//   '</div>'
+// );
 
 Form.editors.Base.prototype.className = 'form-control';
+Form.editors.Checkbox.prototype.className = 'checkbox';
+Form.editors.Checkboxes.prototype.className = 'checkbox';
 Form.Field.errorClassName = 'has-error';
 
 if (Form.editors.List) {
+  // Form.editors.List.template = _.template(
+  //   '<div class="bbf-list">' +
+  //   '  <ul class="ui-sortable" data-items></ul>' +
+  //   '  <button type="button" class="btn bbf-add" data-action="add">Add</button>' +
+  //   '</div>'
+  // );
+
+  // Form.editors.List.Item.template = _.template(
+  //   '<li class="bbf-list-item"><% console.log(this) %>' +
+  //   '  <a href="#" style="display: inline;">' +
+  //   '    <i class="glyphicon glyphicon-remove" style="float:right;" data-action="remove" title="Remove item"></i>' +
+  //   '  </a>' +
+  //   '  <span data-editor></span>' +
+  //   '</li>'
+  // );
   Form.editors.List.template = _.template(
-    '<div class="bbf-list">' +
-    '  <ul class="ui-sortable" style="list-style-type:none;" data-items></ul>' +
-    '  <span class="_jsonform-array-buttons">' +
-    '    <a href="#" class="btn btn-default" data-action="add">' +
-    '      <i class="glyphicon glyphicon-plus-sign" title="Add new"></i>' +
-    '    </a>' +
-    '  </span>' +
+    '<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" data-items>' +
+    '  <button type="button" class="btn bbf-add" data-action="add">Add</button>' +
     '</div>'
+
   );
 
   Form.editors.List.Item.template = _.template(
-    '<li data-idx="0">' +
-    '  <span class="draggable line">' +
-    '    <i class="glyphicon glyphicon-list" title="Move item"></i>' +
-    '  </span>' +
-    '  <a href="#" style="display: inline;">' +
-    '    <i class="glyphicon glyphicon-remove" style="float:right;" data-action="remove" title="Remove item"></i>' +
-    '  </a>' +
-    '  <div class="form-group jsonform-node">' +
-    '    <span class="controls" data-editor></span>' +
-    '    <div class="help-inline" data-error></div>' +
-    '  </div>' +
-    '</li>'
+  '<div class="panel panel-default">' +
+    '<div class="panel-heading" role="tab" id="heading<%= this.cid %>">' +
+      '<h4 class="panel-title">' +
+        '<a role="button" data-toggle="collapse" data-parent="#accordion" href="#<%= this.cid %>" aria-expanded="false" aria-controls="<%= this.cid %>">' +
+          'Collapsible Group Item #1' +
+        '</a>' +
+      '</h4>' +
+    '</div>' +
+    '<div id="<%= this.cid %>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading<%= this.cid %>" data-editor>' +
+    '</div>' +
+  '</div>'
   );
 
   Form.editors.List.Object.template = Form.editors.List.NestedModel.template = _.template(
