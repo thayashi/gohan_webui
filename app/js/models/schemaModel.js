@@ -479,6 +479,8 @@ export default class SchemaModel extends Model {
           schema[key].itemType = 'Object';
           schema[key].order = value.items.propertiesOrder;
           schema[key].subSchema = this.toFormJSON(value.items);
+        } else if (value.items.type === 'string') {
+          schema[key].itemType = 'Text';
         }
       } else if (value.type === 'object') {
         if (value.properties) {

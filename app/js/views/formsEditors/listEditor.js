@@ -18,9 +18,10 @@ Backbone.Form.editors.List = class List extends Backbone.Form.editors.Base {
   static template() {
     return _.template(
       '<div>' +
-      '  <div data-items></div>' +
+      '  <ul class="nav nav-tabs" role="tablist" data-tabs></ul>' +
+      '  <div class="tab-content" data-items></div>' +
       '  <button type="button" data-action="add">Add</button>' +
-      '</div>', Backbone.Form.templateSettings);
+      '</div>', null, Backbone.Form.templateSettings)();
   }
 
   constructor(options) {
@@ -50,6 +51,7 @@ Backbone.Form.editors.List = class List extends Backbone.Form.editors.Base {
     const $el = $($.trim(List.template()));
 
     this.$list = $el.is('[data-items]') ? $el : $el.find('[data-items]');
+    this.$tab = $el.find('[data-tabs]');
 
     if (value.length) {
       value.forEach(itemValue => {
@@ -62,6 +64,7 @@ Backbone.Form.editors.List = class List extends Backbone.Form.editors.Base {
     this.setElement($el);
     this.$el.attr('id', this.id);
     this.$el.attr('name', this.key);
+    this.$el.tab();
 
     if (this.hasFocus) this.trigger('blur', this);
 
@@ -82,15 +85,25 @@ Backbone.Form.editors.List = class List extends Backbone.Form.editors.Base {
       list: this,
       form: this.form,
       schema: this.schema,
-      value,
+      value: value,
       Editor: this.Editor,
       key: this.key
     }).render();
 
+    console.log(item)
+
+    const tab = _.template(
+      '<li role="presentation" class="">' +
+      '  <a href="#<%= cid %>" aria-controls="<%= cid %>" role="tab" data-toggle="tab">Item</a>' +
+      '</li>'
+      , null, Backbone.Form.templateSettings)({cid:item.cid});
+
     const _addItem = () => {
       this.items.push(item);
       this.$list.append(item.el);
-
+      this.$tab.append(tab);
+      $('.nav-tabs a[href="#' + item.cid + '"]').tab('show');
+      console.log(item.cid)
       item.editor.on('all', event => {
         if (event === 'change') return;
 
@@ -268,13 +281,13 @@ Backbone.Form.editors.List.Item = class ListItem extends Backbone.Form.editors.B
     };
   }
 
-  static template() {
+  static template(data) {
     return _.template(
-      '<div>' +
+      '<div role="tabpanel" class="tab-pane fade" id="<%= cid %>">' +
       '  <span data-editor></span>' +
       '  <button type="button" data-action="remove">&times;</button>' +
       '</div>'
-      , null, Backbone.Form.templateSettings);
+      , null, Backbone.Form.templateSettings)(data);
   }
 
   static errorClassName() {
@@ -306,7 +319,7 @@ Backbone.Form.editors.List.Item = class ListItem extends Backbone.Form.editors.B
     }).render();
 
     // Create main element
-    const $el = $($.trim(this.template()));
+    const $el = $($.trim(this.template({cid:this.cid})));
 
     $el.find('[data-editor]').append(this.editor.el);
 
