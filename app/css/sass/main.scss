@@ -301,6 +301,18 @@ body {
   display: none;
 }
 
+span.help-description {
+  display: inline-block;
+  margin-bottom: 5px;
+  color: #999;
+  margin-left: 0.3em;
+}
+
+
+
+
+
+
 
 @media (min-width: 768px) {
   .main {
@@ -458,4 +470,42 @@ fieldset[disabled] .btn-default.focus {
 div.form-control {
   border: 0;
   height: auto;
+  box-shadow: none;
+  padding: 10px;
+}
+
+input[type="checkbox"].form-control {
+  box-shadow: none;
+  display: inline-block;
+  width: auto;
+  height: auto;
+}
+
+.list-container {
+  position: relative;
+  .add-item {
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-weight: bold;
+  }
+  .delete-item {
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 0;
+    display: inline-block;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.list-tabs {
+  counter-reset: section;
+  > li > a:after {
+    counter-increment: section;
+    content: " "counter(section);
+  }
 }

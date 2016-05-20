@@ -109,7 +109,7 @@ export default class DialogView extends View {
     this.dialog.addButton({
       id: 'submit',
       label: 'Submit',
-      cssClass: 'btn-primary btn-lg',
+      cssClass: 'btn-primary',
       action: function action() {
         var error = this.form.validate();
 

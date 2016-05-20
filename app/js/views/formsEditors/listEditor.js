@@ -17,10 +17,10 @@ Backbone.Form.editors.List = class List extends Backbone.Form.editors.Base {
 
   static template() {
     return _.template(
-      '<div>' +
-      '  <ul class="nav nav-tabs" role="tablist" data-tabs></ul>' +
+      '<div class="list-container">' +
+      '  <a class="add-item" data-action="add"><span class="fa fa-plus"></span> Add Item</a>' +
+      '  <ul class="nav nav-tabs list-tabs" role="tablist" data-tabs></ul>' +
       '  <div class="tab-content" data-items></div>' +
-      '  <button type="button" data-action="add">Add</button>' +
       '</div>', null, Backbone.Form.templateSettings)();
   }
 
@@ -64,7 +64,9 @@ Backbone.Form.editors.List = class List extends Backbone.Form.editors.Base {
     this.setElement($el);
     this.$el.attr('id', this.id);
     this.$el.attr('name', this.key);
-    this.$el.tab();
+
+    $('a[href="#' + this.items[this.items.length - 1].cid + '"]', this.$el).parent().addClass('active');
+    this.items[this.items.length - 1].$el.addClass('active in');
 
     if (this.hasFocus) this.trigger('blur', this);
 
@@ -77,6 +79,7 @@ Backbone.Form.editors.List = class List extends Backbone.Form.editors.Base {
    * @param {Boolean} [userInitiated] If the item was added by the user clicking 'add'
    */
   addItem(value, userInitiated) {
+    console.log('additem', value, userInitiated)
 
     const editors = Backbone.Form.editors;
 
@@ -85,25 +88,22 @@ Backbone.Form.editors.List = class List extends Backbone.Form.editors.Base {
       list: this,
       form: this.form,
       schema: this.schema,
-      value: value,
+      value,
       Editor: this.Editor,
       key: this.key
     }).render();
-
-    console.log(item)
 
     const tab = _.template(
       '<li role="presentation" class="">' +
       '  <a href="#<%= cid %>" aria-controls="<%= cid %>" role="tab" data-toggle="tab">Item</a>' +
       '</li>'
-      , null, Backbone.Form.templateSettings)({cid:item.cid});
+      , null, Backbone.Form.templateSettings)({cid: item.cid});
 
     const _addItem = () => {
       this.items.push(item);
       this.$list.append(item.el);
       this.$tab.append(tab);
       $('.nav-tabs a[href="#' + item.cid + '"]').tab('show');
-      console.log(item.cid)
       item.editor.on('all', event => {
         if (event === 'change') return;
 
@@ -174,8 +174,13 @@ Backbone.Form.editors.List = class List extends Backbone.Form.editors.Base {
 
     const index = _.indexOf(this.items, item);
 
+    console.log(item, index)
+
     this.items[index].remove();
     this.items.splice(index, 1);
+    console.log(this.$tab.children().eq(index))
+    this.$tab.children().eq(index).remove();
+    $('.nav-tabs a[href="#' + this.items[0].cid + '"]').tab('show');
 
     if (item.addEventTriggered) {
       this.trigger('remove', this, item.editor);
@@ -283,9 +288,9 @@ Backbone.Form.editors.List.Item = class ListItem extends Backbone.Form.editors.B
 
   static template(data) {
     return _.template(
-      '<div role="tabpanel" class="tab-pane fade" id="<%= cid %>">' +
+      '<div role="tabpanel" class="list-tab-pane tab-pane fade" id="<%= cid %>">' +
+      '  <span class="text-danger delete-item" type="button" data-action="remove"><span class="fa fa-remove"></span> Delete this item</span>' +
       '  <span data-editor></span>' +
-      '  <button type="button" data-action="remove">&times;</button>' +
       '</div>'
       , null, Backbone.Form.templateSettings)(data);
   }
@@ -319,7 +324,7 @@ Backbone.Form.editors.List.Item = class ListItem extends Backbone.Form.editors.B
     }).render();
 
     // Create main element
-    const $el = $($.trim(this.template({cid:this.cid})));
+    const $el = $($.trim(this.template({cid: this.cid})));
 
     $el.find('[data-editor]').append(this.editor.el);
 
