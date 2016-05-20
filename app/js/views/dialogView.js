@@ -12,10 +12,7 @@ import './formsEditors/codeEditor';
 import './formsEditors/template';
 import './formsEditors/validators';
 
-import 'jquery-ui/core';
-import 'jquery-ui/widget';
-import 'jquery-ui/mouse';
-import 'jquery-ui/sortable';
+import Sortable from 'sortablejs/Sortable';
 
 export default class DialogView extends View {
   /**
@@ -109,7 +106,7 @@ export default class DialogView extends View {
     this.dialog.addButton({
       id: 'submit',
       label: 'Submit',
-      cssClass: 'btn-primary btn-lg',
+      cssClass: 'btn-primary',
       action: function action() {
         var error = this.form.validate();
 
@@ -122,7 +119,14 @@ export default class DialogView extends View {
         this.onsubmit(this.form.getValue());
       }.bind(this)
     });
-    $('.ui-sortable', this.form.$el).sortable();
+
+    $('.list-sortable', this.form.$el).each((index, element) => {
+      Sortable.create(element, {
+        animation: 150,
+        handle: '.list-drag',
+        draggable: '.list-item-container'
+      });
+    });
     this.dialog.open();
   }
 }
