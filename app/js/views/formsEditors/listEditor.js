@@ -10,9 +10,8 @@ Backbone.Form.editors.List = class List extends Backbone.Form.editors.Base {
       'click [data-action="add"]': event => {
         event.stopPropagation();
         event.preventDefault();
-        const defaultValue = Array.isArray(this.value) ? this.value[0] : this.value;
 
-        this.addItem(defaultValue, true);
+        this.addItem(this.schema.default, true);
       },
       'click span.tab-delete': event => {
         event.stopPropagation();
