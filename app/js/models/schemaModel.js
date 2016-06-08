@@ -1,6 +1,7 @@
 /* global fetch */
-import {Model, Collection} from 'backbone';
+import Backbone, {Model, Collection} from 'backbone';
 import jsyaml from 'js-yaml';
+import 'backbone-forms';
 
 /**
  * Class contains logic of schema model in application.
@@ -442,6 +443,7 @@ export default class SchemaModel extends Model {
   }
   toFormJSON(json) {
     const schema = {};
+    const validators = Backbone.Form.validators;
 
     for (let key in json.properties) {
       if (json.propertiesOrder !== undefined) {
@@ -522,7 +524,7 @@ export default class SchemaModel extends Model {
       } else if (value.type === 'boolean') {
         schema[key].type = 'Checkbox';
       }
-      if (value.format !== undefined) {
+      if (value.format !== undefined && validators.hasOwnProperty(value.format)) {
         schema[key].validators.push(value.format);
       }
       if (json.required !== undefined &&
