@@ -43,6 +43,8 @@ export default class SampleView extends View {
    */
   render() {
     this.$el.html(template());
+    $('.selectpicker', this.$el).selectpicker({
+    });
     return this;
   }
 

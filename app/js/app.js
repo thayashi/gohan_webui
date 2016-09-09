@@ -1,6 +1,7 @@
 /* global $, document */
 // Import bootstraps.
 import 'bootstrap';
+import 'bootstrap-select';
 import 'bootstrap-dialog';
 
 // Import css.

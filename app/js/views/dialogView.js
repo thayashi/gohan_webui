@@ -53,6 +53,7 @@ export default class DialogView extends View {
           'overflow-y': 'auto'
         });
         $('#name').focus();
+        //$('.selectpicker').selectpicker({});
       },
       onhide: this.onhide,
       onshow: this.onshow
@@ -192,6 +193,7 @@ export default class DialogView extends View {
       }
     }
     this.form.render();
+    
     this.form.$el.prepend('<div data-gohan="error"></div>');
     this.dialog.setMessage(this.form.el);
     this.dialog.addButton({
@@ -210,6 +212,7 @@ export default class DialogView extends View {
         this.onsubmit(this.form.getValue());
       }
     });
+    
     $('[data-gohan="error"]', this.form.el).append(this.errorView.el);
     this.dialog.open();
   }
