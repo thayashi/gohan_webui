@@ -124,9 +124,9 @@ export default class AppView extends View {
   }
 
   buildUi() {
-    const params = this.router.getQueryParams();
 
     this.schemas.each(schema => {
+      const params = this.router.getQueryParams();
       const metadata = schema.get('metadata');
       const type = params.type || 'tenant';
 
@@ -156,7 +156,6 @@ export default class AppView extends View {
         this.closeActivePage();
 
         this.view = new viewClass.table({
-          params: this.router.getQueryParams(),
           schema,
           collection,
           childview: schema.hasParent(),
@@ -181,7 +180,7 @@ export default class AppView extends View {
           fragment: history.fragment,
           app: this,
           polling: this.config.get('polling'),
-          params: this.router.getQueryParams()
+          params
         });
 
         this.$('#main_body').html(this.view.el);
@@ -208,7 +207,6 @@ export default class AppView extends View {
         this.closeActivePage();
         if (schema === undefined) {
           this.view = new this.viewClass[route.viewClass]({
-            params: this.router.getQueryParams(),
             arguments: rest,
             fragment: history.fragment,
             app: this
@@ -226,7 +224,6 @@ export default class AppView extends View {
               app: this,
               schema,
               model,
-              params: this.router.getQueryParams(),
               collection
             });
             this.$('#main_body').append(this.view.el);
@@ -236,7 +233,6 @@ export default class AppView extends View {
               fragment: history.fragment,
               app: this,
               schema,
-              params: this.router.getQueryParams(),
               collection
             });
 

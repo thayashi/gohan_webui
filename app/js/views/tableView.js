@@ -39,7 +39,6 @@ export default class TableView extends View {
     this.template = options.template || tableTemplate;
     this.loaderTemplate = options.loaderTemplate || loaderTemplate;
     this.dialogTemplate = options.dialogTemplate;
-    this.params = options.params;
     this.schema = options.schema;
     this.parent = options.parent;
     this.parentId = options.parentId;
@@ -49,12 +48,7 @@ export default class TableView extends View {
     if (options.pageLimit !== undefined) {
       this.collection.pageLimit = Number(options.pageLimit);
     }
-    if (this.params && this.params.page) {
-      this.activePage = Number(this.params.page);
-    } else {
-      this.activePage = 1;
-    }
-
+    this.activePage = 1;
     this.paginationSettings = {
       start: 1,
       limit: 7
@@ -84,7 +78,7 @@ export default class TableView extends View {
       if (options.sortOrder) {
         this.collection.sortOrder = options.sortOrder;
       }
-      this.collection.getPage(this.activePage - 1).then(() => {
+      this.collection.getPage().then(() => {
         this.render();
         this.searchQuery.propField = $('[data-gohan="search"] select', this.$el).val();
         if (this.polling) {
@@ -180,7 +174,6 @@ export default class TableView extends View {
   paginationHandler(event) {
     event.preventDefault();
     event.stopPropagation();
-
     let newActivePage = event.currentTarget.dataset.id;
     let showMorePages = event.currentTarget.dataset.more;
 
@@ -209,10 +202,6 @@ export default class TableView extends View {
     }
 
     this.activePage = Number(newActivePage);
-
-    if (!this.childview) {
-      this.app.router.setQueryParams({page: this.activePage});
-    }
 
     this.getPage(Number(newActivePage));
   }
@@ -408,9 +397,6 @@ export default class TableView extends View {
     return this;
   }
   close() {
-    if (!this.childview) {
-      this.app.router.setQueryParams();
-    }
     if (this.polling) {
       this.collection.stopLongPolling();
     }
