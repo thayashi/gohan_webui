@@ -1,0 +1,359 @@
+/*
+ * Base structure
+ */
+
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500,700,900);
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #eceef2;
+}
+
+/*
+ * login
+ */
+
+.login-panel {
+  width: 420px;
+  height: 360px;
+  padding: 55px 50px 30px;
+  margin: auto;
+  position: absolute;
+  top: -80px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  h1 {
+    background: url(../../img/gohan-logo-gray.png) no-repeat 5px center;
+    background-size: 56px 60px;
+    font-size: 38px;
+    line-height: 60px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-left: 75px;
+    font-weight: normal;
+  }
+}
+
+
+// Error Message
+.tableview, .detailview, .error-message {
+  > [data-gohan="error"] {
+    position: fixed;
+    width: 100%;
+    margin: 0;
+    left: 0;
+    padding-left: 230px;
+    z-index: 1050;
+    top: 30px;
+    > div {
+      margin-left: 30px;
+      margin-right: 30px;
+    }
+  }
+}
+
+/*
+ * Popover
+ */
+
+.popover {
+  .popover-content {
+    padding: 0;
+  }
+  pre {
+    margin-bottom: 0;
+    border-radius: 0;
+    border: none;
+    background-color: transparent;
+  }
+}
+
+.pagination > li > a, .pagination > li > span {
+  cursor: pointer;
+}
+
+// .navbar-nav > li {
+//   float: left;
+// }
+
+// .navbar-right {
+//     float: right !important;
+//     margin-right: -15px;
+// }
+/*
+ * Bsic layout
+ */
+.main {
+  padding-top: 70px;
+  padding-right: 20px;
+  padding-left: 20px;
+  margin-left: 230px;
+}
+
+/*
+ * Header
+ */
+.gohan-header {
+  left: 230px;
+  ol {
+    margin-left: 0;
+    padding: 0px;
+    margin: 0;
+    line-height: 50px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 300;
+    a {
+      color: #fff;
+    }
+    li{
+      display: inline;
+      list-style: none;
+    }
+    li+li:before{
+      content: " > ";
+    }
+  }
+}
+
+
+/*
+ * Sidebar
+ */
+
+.sidebar {
+  position: fixed;
+  top: 0px;
+  bottom: 0;
+  left: 0;
+  width: 230px;
+  display: block;
+  overflow-x: hidden;
+  overflow-y: auto; 
+  background-color: #fff;
+  border-right: 1px solid #ddd;
+
+  .brand {
+    position: fixed;
+    width: 213px;
+    padding: 15px;
+    padding-top: 5px;
+    height: 100px;
+    top: 0px;
+    .search {
+      padding-top: 5px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 35px;
+      padding-left: 45px;
+      background: url(../../img/gohan-logo-gray.png) no-repeat 5px 3px;
+      background-size: 30px 32px;
+      font-weight: normal;
+      a {
+        color: #333;
+      }
+    }
+    z-index: 10;
+    background-color: #fff;
+    .version-info {
+      font-size: 11px;
+      text-align: right;
+      color: #aaa;
+      padding-right: 5px;
+      margin-top: -5px;
+    }
+  }
+  .nav-sidebar {
+    padding-top: 101px;
+  }
+  .nav {
+    li {
+      > a {
+
+      }
+      &.active {
+        > a {
+          color: #212121;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
+
+
+/*
+ * Card
+ */
+
+.card {
+  background: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 1px rgba(0,0,0,.1);
+  //padding: 15px;
+  .table {
+    margin-bottom: 0;
+  }
+}
+
+/*
+ * Table View
+ */
+
+.gohan-table-header {
+  .resource-name {
+    padding-left: 2px;
+    h2 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 34px;
+    }
+  }
+  .actions {
+    padding-right: 2px;
+    text-align: right;
+  }
+  span.filterby {
+    color: #bbb;
+  }
+  margin-bottom: 10px;
+}
+
+.gohan-table {
+  table-layout: fixed;
+  td, th {
+    word-wrap: break-word;
+    word-break: break-all;
+  }
+  td.action_column {
+    min-width: 70px;
+    text-align: right;
+    .action-icon {
+      display: inline-block;
+      margin-right: 13px;
+      cursor: pointer;
+      opacity: 0.4;
+      transition-property: opacity;
+      transition-duration: 0.2s;
+    }
+  }
+  tr:hover {
+    .action-icon {
+      opacity: 1;
+    }
+  }
+  td.no-data {
+    text-align: center;
+    font-size: 1em;
+    color: #bbb;
+    padding: 10px;
+  }
+}
+
+
+
+/*
+ * Detail View
+ */
+
+.gohan-detail-container {
+  margin-bottom: 20px;
+  .gohan-detail-header {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    > div {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-size: 16px;
+      line-height: 20px;
+      color: #bbb;
+      font-weight: normal;
+      display: inline-block;
+      margin: 0;
+    }
+    .edit {
+      line-height: 20px;
+      padding-right: 10px;
+      border-right: 1px solid #ddd;
+      margin-right: 10px;
+      display: inline-block;
+      .glyphicon {
+        margin-right: 5px;
+      }
+      &:last-child {
+        border: none;
+        padding-right: 0;
+        margin-right: 0;
+      }
+    }
+  }
+  .gohan-detail-property {
+    margin-bottom: 20px;
+    .property-title {
+      color: #bbb;
+      padding-top: 2px;
+    }
+    .property-detail {
+      font-size: 1.3em;
+      word-wrap: break-word;
+      word-break: break-all;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .gohan-detail-container {
+  .gohan-detail-header {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    > div.actions {
+      text-align: right;
+    }
+  }
+    .gohan-detail-property {
+      .property-title {
+        text-align: right;
+      }
+    }
+  }
+}
+
+
+/*
+ * child resource
+ */
+
+.child-resource {
+  margin-bottom: 20px;
+}
+
+
+/*
+ * Top
+ */
+
+.top-container {
+  h2 {
+    margin: 0;
+    font-size: 18px;
+    margin-bottom: 10px;
+    padding-left: 5px;
+  }
+  .card {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+
+  .pre-url {
+    line-height: 34px;
+  }
+}
