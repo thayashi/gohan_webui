@@ -1,0 +1,421 @@
+/*
+ * Base structure
+ */
+
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500,700,900);
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #eceef2;
+  > .error-message {
+    position: fixed;
+    z-index: 100;
+    width: 60%;
+    margin: 8px auto;
+    left: 230px;
+    right: 0px;
+  }
+
+}
+
+/*
+ * login
+ */
+
+.login_panel {
+  width: 420px;
+  height: 360px;
+  padding: 55px 50px 30px;
+  margin: auto;
+  position: absolute;
+  top: -80px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  //background: url(../../img/logo.png) no-repeat center top;
+  background-size: 250px 45px;
+}
+
+/*
+ * Top
+ */
+
+.top-container {
+  h2, h3 {
+    font-size: 18px;
+    line-height: 34px;
+  }
+  h3 {
+    margin: 0;
+  }
+  .card {
+    padding: 20px;
+  }
+
+  .pre-url {
+    line-height: 34px;
+  }
+}
+
+/*
+ * Alert, Error Message
+ */
+
+.alert {
+  margin-bottom: 15px;
+}
+
+
+// Error Message
+.tableview, .detailview, .error-message {
+  > [data-gohan="error"] {
+    position: fixed;
+    width: 100%;
+    margin: 0;
+    left: 0;
+    z-index: 1001;
+    top: 20px;
+    > div {
+      width: 60vw;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
+
+/*
+ * Popover
+ */
+
+.popover {
+  max-width: 500px;
+  background-color: #f5f5f5;
+  .popover-content {
+    padding: 0;
+  }
+  pre {
+    margin-bottom: 0;
+    border-radius: 0;
+    border: none;
+    background-color: transparent;
+  }
+  &.top > .arrow:after {
+    border-top-color: #f5f5f5;
+  }
+  &.right > .arrow:after {
+    border-right-color: #f5f5f5;
+  }
+  &.bottom > .arrow:after {
+    border-bottom-color: #f5f5f5;
+  }
+  &.left > .arrow:after {
+    border-left-color: #f5f5f5;
+  }
+}
+
+/*
+ * Header
+ */
+
+.gohan_header {
+  box-shadow: 0 1px 2px rgba(0,0,0,.3);
+  background-color: #3D404E;
+  //background-image: linear-gradient(-180deg, #3D404E 0%, #1D1E25 100%);
+
+  min-height: 50px;
+  margin-left: -20px;
+  margin-right: -20px;
+  margin-bottom: 15px;
+  .title {
+    padding-left: 20px;
+  }
+
+  .nav {
+    > li > a {
+      padding-left: 20px;
+      padding-right: 20px;
+      &:hover {
+        background-color: rgba(#fff, 0.03); 
+      }
+    }
+    .open > a {
+      background-color: rgba(#fff, 0.03); 
+    }
+  }
+  ol {
+    margin-left: 0;
+    padding: 0px;
+    margin: 0;
+    line-height: 50px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 300;
+    a {
+      color: #fff;
+    }
+    li{
+      display: inline;
+      list-style: none;
+    }
+    li+li:before{
+      content: " > ";
+    }
+  }
+}
+
+/*
+ * Sidebar
+ */
+
+.sidebar {
+  position: fixed;
+  top: 0px;
+  bottom: 0;
+  left: 0;
+  width: 230px;
+  display: block;
+  overflow-x: hidden;
+  overflow-y: auto; 
+  background-color: #fff;
+  border-right: 1px solid #ddd;
+
+  .brand {
+    position: fixed;
+    width: 213px;
+    padding: 15px;
+    padding-top: 5px;
+    height: 100px;
+    top: 0px;
+    .search {
+      padding-top: 5px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 35px;
+      padding-left: 45px;
+      background: url(../../img/gohan-logo-gray.png) no-repeat 5px 3px;
+      background-size: 30px 32px;
+      font-weight: normal;
+      a {
+        color: #333;
+      }
+    }
+    z-index: 10;
+    background-color: #fff;
+    .version-info {
+      font-size: 11px;
+      text-align: right;
+      color: #aaa;
+      padding-right: 5px;
+      margin-top: -5px;
+    }
+  }
+
+  .nav-sidebar {
+    padding-top: 101px;
+    .nav {
+      li {
+        &.menu-header {
+          padding: 0px 15px;
+          font-size: 13px;
+          color: #666;
+          font-weight: bold;
+        }
+        a {
+          padding: 8px 15px;
+          &:focus {
+            background-color: transparent;
+          }
+        }
+        &.active {
+          border-left: 5px solid #263238;
+          a {
+            padding-left: 10px;
+            color: #263238;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+    padding-bottom: 15px;
+  }
+
+  .favorites-menu {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+
+}
+
+.main {
+  padding-right: 20px;
+  padding-left: 20px;
+  margin-left: 230px;
+}
+
+/*
+ * Card
+ */
+
+.card {
+  background: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 1px rgba(0,0,0,.1);
+  //padding: 15px;
+  .table {
+    margin-bottom: 0;
+  }
+  .no-data {
+    text-align: center;
+    padding: 20px;
+    h3 {
+      display: inline;
+      font-size: 1em;
+      color: #aaa;
+    }
+  }
+}
+
+/*
+ * table
+ */
+
+.container-fluid {
+  .resource_name {
+    padding-left: 2px;
+    h2 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 34px;
+    }
+  }
+  .func {
+    padding-right: 2px;
+    text-align: right;
+    .edit {
+      padding-right: 10px;
+      border-right:1px solid #ccc;
+      margin-right: 10px;
+      &:last-child {
+        border: none;
+        padding-right: 0;
+        margin-right: 0;
+      }
+    }
+    .form-inline {
+      display: inline;
+      margin-right: 5px;
+    }
+  }
+  margin-bottom: 10px;
+
+}
+
+.gohan-table {
+  table-layout: fixed;
+  td, th {
+    word-wrap: break-word;
+    word-break: break-all;
+    font-size: 0.9em;
+  }
+  td.action_column {
+    min-width: 70px;
+    text-align: right;
+    padding-right: 16px;
+  }
+}
+
+.pagination > li > a, .pagination > li > span {
+  cursor: pointer;
+}
+
+/*
+ * Detail
+ */
+
+.detail_info_container {
+  > .container-fluid > .row:first-child {
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    h2 {
+      font-size: 16px;
+      line-height: 20px;
+      color: #aaa;
+      font-weight: normal;
+      display: inline-block;
+    }
+    .edit {
+      line-height: 20px;
+    }
+  }
+  .tab-pane {
+    padding: 25px 5px 10px;
+  }
+  margin-bottom: 21px;
+  padding: 15px;
+  padding-bottom: 0;
+
+  .row_property {;
+    margin-bottom: 20px;
+    &:after {
+      content: " ";
+      display: table;
+      clear: both;
+    }
+
+    .property_title {
+      color: #aaa;
+      font-size: 14px;
+      float: left;
+      width: 20rem;
+      padding-top: 2px;
+      text-align: right;
+    }
+    .property_detail {
+      font-size: 18px;
+      margin-left: 22rem;
+    }
+  }
+}
+
+/* Device Detail Links */
+.tool-links {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  border-radius: 3px;
+  .tools >  a {
+    margin-right: 10px;
+    padding-right: 10px;
+    border-right: 1px solid #999;
+    &:last-child {
+      border: none;
+    }
+  }
+}
+
+.uptime {
+  margin-left: 10px;
+  padding-left: 10px;
+  border-left: 1px solid #999;
+  font-size: 16px;
+  line-height: 20px;
+  color: #aaa;
+}
+
+
+/*
+ * child resource
+ */
+
+.child_resource {
+  margin-bottom: 20px;
+}

@@ -1,11 +1,22 @@
 var port = 8080;
 var hostname = 'localhost';
 var path = require('path');
+var git = require('git-rev-sync');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var BowerWebpackPlugin = require('bower-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var SingleModuleInstancePlugin = require('single-module-instance-webpack-plugin');
+
+
+function version() {
+  return {
+    hash: git.long(),
+    tag: git.tag(),
+    version: process.env.npm_package_version
+  };
+}
+
 
 module.exports = {
   context: __dirname,
@@ -60,22 +71,15 @@ module.exports = {
     ]
   },
   plugins: [
+    new webpack.DefinePlugin({
+      VERSION: JSON.stringify(version())
+    }),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
       'window.jQuery': 'jquery'
     }),
     new ExtractTextPlugin('styles.css'),
-    new BowerWebpackPlugin({
-      modulesDirectories: ['bower_components'],
-      manifestFiles: [
-        'bower.json',
-        '.bower.json',
-      ],
-      includes: /.*/,
-      excludes: [],
-      searchResolveModulesDirectories: true
-    }),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
@@ -87,6 +91,8 @@ module.exports = {
       template: './app/index.html',
       inject: 'body'
     }),
+    new webpack.optimize.DedupePlugin(),
+    new SingleModuleInstancePlugin(),
     new CopyWebpackPlugin([
       { from: 'app/config.json', to: '/config.json' }
     ])

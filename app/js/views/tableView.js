@@ -336,7 +336,7 @@ export default class TableView extends View {
       if (property.type === 'object' || property.originalType === 'object') {
         content = $('<pre style="width:500px;"></pre>').text(
           '<pre>' + jsyaml.safeDump(value) + '</pre>').html();
-        content = content.replace('\'', '&#34;');
+        content = content.replace(/\'/g, '&#34;');
         return dataPopupTemplate({
           content
         });
