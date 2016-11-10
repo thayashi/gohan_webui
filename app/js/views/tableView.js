@@ -28,7 +28,10 @@ export default class TableView extends View {
       'click [data-gohan="sort-title"]': 'sortData',
       'keyup [data-gohan="search"]': 'searchByKey',
       'change [data-gohan="search"]': 'searchByField',
-      'click [data-gohan="pagination"] li:not(.disabled) a': 'paginationHandler'
+      'click [data-gohan="pagination"] li:not(.disabled) a': 'paginationHandler',
+      'click [data-gohan="toggle-row"]': 'toggleRow',
+      'click [data-gohan="toggle-all-row"]': 'toggleAllRow',
+      'click [data-gohan="delete-all"]': 'deleteSelectedModel'
     };
   }
   constructor(options) {
@@ -45,7 +48,7 @@ export default class TableView extends View {
     this.parentId = options.parentId;
     this.fragment = options.fragment;
     this.childview = options.childview;
-    this.polling = options.polling;
+    this.polling = false;
     if (options.pageLimit !== undefined) {
       this.collection.pageLimit = Number(options.pageLimit);
     }
@@ -146,6 +149,37 @@ export default class TableView extends View {
     }, error => {
       this.errorView.render(...error);
     });
+  }
+  toggleRow(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const $target = $(event.currentTarget);
+    const id = $target.data('id');
+    const model = this.collection.get(String(id));
+
+    if (model.isSelected) {
+      model.isSelected = false;
+    } else {
+      model.isSelected = true;
+    }
+    this.render();
+  }
+  toggleAllRow(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    let selected = true;
+
+    this.collection.each(model => {
+      if (model.isSelected) {
+        selected = false;
+      }
+    });
+    this.collection.each(model => {
+      model.isSelected = selected;
+    });
+    this.render();
   }
   sortData(event) {
     event.preventDefault();
@@ -304,10 +338,46 @@ export default class TableView extends View {
           const $target = $(event.currentTarget);
           const id = $target.data('id');
           const model = this.collection.get(String(id));
+          model.isDeleting = true;
+          this.render();
 
           model.destroy({wait: true}).then(() => {
             this.collection.fetch().catch(error => this.errorView.render(...error));
-          }, error => this.errorView.render(...error));
+          },
+          error => {
+            model.isDeleting = false;
+            this.render();
+            this.errorView.render(...error);
+          });
+        }
+      }
+    });
+  }
+  deleteSelectedModel(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    BootstrapDialog.confirm({
+      title: 'Delete',
+      message: 'Are you sure to delete?',
+      closable: true,
+      btnOKLabel: 'Delete',
+      callback: result => {
+        if (result) {
+          this.collection.each(model => {
+            if (model.isSelected && !model.isDeleting) {
+              model.isDeleting = true;
+              model.destroy({wait: true}).then(() => {
+                this.collection.fetch().catch(error => this.errorView.render(...error));
+              },
+              error => {
+                model.isDeleting = false;
+                this.render();
+                this.errorView.render(...error);
+              });
+            }
+          });
+          this.render();
         }
       }
     });
@@ -366,6 +436,14 @@ export default class TableView extends View {
       }
       return result;
     });
+
+    let uiState = this.collection.map(model => {
+      return {
+        isSelected: model.isSelected,
+        isDeleting: model.isDeleting
+      };
+    });
+
     if (this.app && !this.childview) {
       this.app.router.changeTitle(this.schema.get('title'));
       const parents = [];
@@ -389,6 +467,7 @@ export default class TableView extends View {
 
     this.$el.html(this.template({
       data: list,
+      uiState,
       activePage: this.activePage,
       pageCount: this.collection.getPageCount(),
       schema: this.schema.toJSON(),

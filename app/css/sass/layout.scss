@@ -324,10 +324,18 @@ body {
     word-break: break-all;
     font-size: 0.9em;
   }
+  td.selector_col, th.selector_col {
+    width: 2em;
+  }
   td.action_column {
     min-width: 70px;
     text-align: right;
     padding-right: 16px;
+  }
+  span[data-gohan="toggle-row"] {
+    &.disabled {
+      pointer-events: none;
+    }
   }
 }
 
@@ -353,6 +361,9 @@ body {
     }
     .edit {
       line-height: 20px;
+      .fa {
+        margin-right: 5px;
+      }
     }
   }
   .tab-pane {

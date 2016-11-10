@@ -1,4 +1,15 @@
+<%
 
+const resourceLength = data.length;
+let selectedResources = 0;
+
+uiState.forEach((state) => {
+  if (state.isSelected) {
+    selectedResources ++;
+  }
+});
+
+%>
 <div class="container-fluid table_search">
   <div class="row">
     <div class="col-xs-4 resource_name">
@@ -26,9 +37,13 @@
           <input type="text" class="form-control"  placeholder="Search" value="<%= searchQuery.value %>">
         </div>
       </form>
+        <% if (selectedResources > 0) { %>
+          <a class="btn btn-warning gohan_delete_selected" data-gohan="delete-all">Delete All</a>
+        <% } %>
         <a class="btn btn-primary gohan_create" data-gohan="create">
             <strong>+</strong> New
         </a>
+        
     </div>
   </div>
 </div>
@@ -37,6 +52,15 @@
   <table class="table gohan-table">
     <thead>
       <tr>
+        <th class="selector_col">
+<%
+          const allAriaCheckState = (selectedResources === 0) ? 'false' : (resourceLength === selectedResources) ? 'true' : 'mixed';
+          const allCheckboxState = (selectedResources === 0) ? 'fa-square-o' : (resourceLength === selectedResources) ? 'fa-check-square' : 'fa-minus-square-o';
+%>
+          <span class="" role="checkbox" aria-checked="<%= allAriaCheckState %>" tabindex="0" aria-label="checkbox">
+            <span data-gohan="toggle-all-row" class="fa <%= allCheckboxState  %>"></span>
+          </span>
+       </th>
        <% schema.schema.propertiesOrder.forEach( function(key){
            var property = schema.schema.properties[key];
            var view = property['view']
@@ -45,6 +69,7 @@
              return;
            }
         %>
+
         <th>
             <a href="#/<%= schema.url.substring(1) %>" data-id="<%= key %>" class="title" data-gohan="sort-title"><%= property.title %>
                 <% if(sort.by === key) {
@@ -61,8 +86,20 @@
       </tr>
     </thead>
     <tbody id="page<%= key + 1 %>" >
-      <% _.each(data, function(d){ %>
-      <tr>
+<% 
+      _.each(data, function(d, i) {
+        const isSelected = uiState[i].isSelected;
+        const isDeleting = uiState[i].isDeleting;
+        const checkboxState = (isSelected)? 'fa-check-square' : 'fa-square-o';
+        const checkboxDisable = (isDeleting)? 'disabled' : '';
+        const trState = (isDeleting) ? 'active' : (isSelected) ? 'info' : '';
+%>
+      <tr class="<%= trState %>">
+        <td class="selector_col">
+          <span class="" role="checkbox" aria-disabled="<%= String(isDeleting) %>" aria-checked="<%= String(isSelected) %>" tabindex="0" aria-label="checkbox">
+            <span data-gohan="toggle-row" class="<%= checkboxDisable %> fa <%= checkboxState %>" data-id=<%= d.id %>></span>
+          </span>
+        </td>
         <% schema.schema.propertiesOrder.forEach( function(key){
           var property = schema.schema.properties[key];
           var view = property['view']
@@ -87,17 +124,24 @@
         <% } %>
         <% }); %>
         <td class="action_column">
-          <div class="btn-group ">
-          <a class="btn btn-default btn-sm btn-raised btn-material-blue-600" data-id="<%- d['id']%>" data-gohan="update">Edit</a>
-             <button type="button" class="btn btn-default btn-sm dropdown-toggle"
+          <% if (isDeleting) { %>
+          deleting...
+        <% } else { %>
+          <a class="" data-id="<%- d['id']%>" data-gohan="update"><span class="fa fa-edit" aria-hidden="true"></span></a>
+          <a class="" data-id="<%- d['id']%>" data-gohan="delete"><span class="fa fa-trash-o" aria-hidden="true"></span>Delete</a>
+        <% } %>
+       <!--    <div class="btn-group ">
+            <a class="btn btn-default btn-sm" data-id="<%- d['id']%>" data-gohan="update"><span class="fa fa-edit" aria-hidden="true"></span></a>
+            <a class="btn btn-default btn-sm" data-id="<%- d['id']%>" data-gohan="delete"><span class="fa fa-trash-o" aria-hidden="true"></span></a> -->
+<!--              <button type="button" class="btn btn-default btn-sm dropdown-toggle"
                 data-toggle="dropdown" aria-expanded="true" data-container="body">
              <span class="caret"></span>
              <span class="sr-only">Toggle Dropdown</span>
            </button>
            <ul class="dropdown-menu pull-right" role="menu" >
-              <li><a data-id="<%- d['id']%>" data-gohan="delete">Delete</a></li>
-           </ul>
-          </div>
+              <li><a data-id="<%- d['id']%>" data-gohan="delete"><span class="fa fa-trash-o" aria-hidden="true"></span>Delete</a></li>
+           </ul> -->
+         <!--  </div> -->
         </td>
       </tr>
       <% }); %>
