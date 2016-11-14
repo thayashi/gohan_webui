@@ -1,3 +1,16 @@
+<%
+
+const resourceLength = data.length;
+let selectedResources = 0;
+
+uiState.forEach((state) => {
+  if (state.isSelected) {
+    selectedResources ++;
+  }
+});
+
+%>
+
 <div class="container-fluid gohan-table-header">
   <div class="row">
     <div class="col-xs-4 resource-name">
@@ -22,6 +35,9 @@
 %>
           </select>
           <input type="text" class="form-control"  placeholder="Search" value="<%= searchQuery.value %>">
+          <% if (selectedResources > 0) { %>
+          <a class="btn btn-danger" data-gohan="delete-all">Delete All</a>
+          <% } %>
           <a class="btn btn-primary gohan_create" data-gohan="create"><strong>+</strong> New</a>
         </div>
       </form>
@@ -33,8 +49,18 @@
   <table class="table gohan-table">
     <thead>
       <tr>
+        <th class="checkbox-col">
 <%
-      let columns = 1;
+          const allAriaCheckState = (selectedResources === 0) ? 'false' : (resourceLength === selectedResources) ? 'true' : 'mixed';
+          const allCheckboxState = (selectedResources === 0) ? 'fa-square-o' : (resourceLength === selectedResources) ? 'fa-check-square' : 'fa-minus-square-o';
+%>
+          <span class="gohan-checkbox" role="checkbox" aria-checked="<%= allAriaCheckState %>" tabindex="0" aria-label="checkbox">
+            <span data-gohan="toggle-all-row" class="fa <%= allCheckboxState  %>"></span>
+          </span>
+       </th>
+
+<%
+      let columns = 2;
       schema.schema.propertiesOrder.forEach(function(key) {
         let property = schema.schema.properties[key];
         let view = property['view']
@@ -68,9 +94,19 @@
       <tr><td colspan="<%= columns %>" class="no-data">No Data</td></tr>
 <%
    } else {
-      data.forEach(function(d) {
+      data.forEach(function(d, i) {
+        const isSelected = uiState[i].isSelected;
+        const isDeleting = uiState[i].isDeleting;
+        const checkboxState = (isSelected)? 'fa-check-square' : 'fa-square-o';
+        const checkboxDisable = (isDeleting)? 'disabled' : '';
+        const trState = (isDeleting) ? 'active' : (isSelected) ? 'info' : '';
 %>
-      <tr class="info">
+      <tr class="<%= trState %>">
+        <td class="checkbox-col">
+          <span class="gohan-checkbox" role="checkbox" aria-disabled="<%= String(isDeleting) %>" aria-checked="<%= String(isSelected) %>" tabindex="0" aria-label="checkbox">
+            <span data-gohan="toggle-row" class="<%= checkboxDisable %> fa <%= checkboxState %>" data-id=<%= d.id %>></span>
+          </span>
+        </td>
 <% 
         schema.schema.propertiesOrder.forEach(function(key) {
           let property = schema.schema.properties[key];
@@ -101,7 +137,17 @@
         });
 %>
         <td class="action_column">
+<%
+          if (isDeleting) {
+%>
+          <span class="deleting">Deleting...</span>
+<%
+          } else {
+%>
           <a class="action-icon" data-id="<%- d['id']%>" data-gohan="update" data-toggle="tooltip" data-placement="top" title="Edit"><span class="glyphicon glyphicon-pencil" aria-label="Edit"></span></a><a class="action-icon" data-id="<%- d['id']%>" data-gohan="delete" data-toggle="tooltip" data-placement="top" title="Delete"><span class="glyphicon glyphicon-trash" aria-label="Delete"></span></a>
+<%
+          }
+%>
         </td>
       </tr>
 <% 
