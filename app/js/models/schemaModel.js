@@ -731,7 +731,7 @@ export default class SchemaModel extends Model {
             schema[key].options = value.enum;
           }
         } else if (value.format !== undefined &&
-          (value.format === 'yaml' || value.format === 'javascript')) {
+          (value.format === 'yaml' || value.format === 'javascript' || value.format === 'text')) {
           schema[key].format = value.format;
           schema[key].type = 'CodeEditor';
         } else {
@@ -1036,9 +1036,6 @@ export default class SchemaModel extends Model {
     if (schema.properties !== undefined) {
       const result = {};
       for (let key in schema.properties) {
-        if (key === 'id') {
-          continue;
-        }
         result[key] = self.toServerData(schema.properties[key], data[key]);
       }
       return result;

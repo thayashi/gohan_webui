@@ -313,3 +313,14 @@ Backbone.Form.validators.yaml = function uri(options) {
     }
   };
 };
+
+Backbone.Form.validators.text = function text(options) {
+  options = Object.assign({
+    type: 'text',
+    message: this.errMessages.text
+  }, options);
+
+  return value => {
+    options.value = value;
+  };
+};
