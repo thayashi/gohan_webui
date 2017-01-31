@@ -1,0 +1,10 @@
+<div class="gohan-custom-actions">
+  Custom actions:
+<%
+  actionsNames.forEach(item => {
+%>
+    <a data-gohan="action" data-id="<%- item %>"><%- item %></a>
+<%
+  });
+%>
+</div>

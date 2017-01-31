@@ -2,6 +2,7 @@
 import 'whatwg-fetch';
 import jsyaml from 'js-yaml';
 import {Model, Collection} from 'backbone';
+import CustomActionModel from './customActionModel';
 
 /**
  * Class contains logic of schema model in application.
@@ -9,6 +10,20 @@ import {Model, Collection} from 'backbone';
  * @extends Model
  */
 export default class SchemaModel extends Model {
+
+  initialize(options) {
+    const actions = options.actions;
+
+    for (let key in actions) {
+      actions[key] = new CustomActionModel({
+        model: actions[key],
+        userModel: this.collection.userModel
+      });
+    }
+
+    super.initialize(options);
+  }
+
   collections() {
     return [];
   }
@@ -73,6 +88,21 @@ export default class SchemaModel extends Model {
    */
   hasParent() {
     return this.get('parent') !== undefined && this.get('parent') !== '';
+  }
+
+  hasActions() {
+    const actions = this.get('actions');
+
+    for (let key in actions) {
+      if (actions.hasOwnProperty(key))
+        return true;
+    }
+    return false;
+  }
+
+  getActions() {
+    const actions = this.get('actions');
+    return actions;
   }
 
   /**

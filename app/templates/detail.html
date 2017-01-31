@@ -8,6 +8,13 @@
       </div>
     </div>
 <%
+    if (hasActions) {
+%>
+      <div data-gohan="actions"></div>
+<%  }
+%>
+
+<%
     schema.schema.propertiesOrder.forEach(function(key) {
       const property = schema.schema.properties[key];
       const view = property['view'];
